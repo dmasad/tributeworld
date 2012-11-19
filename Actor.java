@@ -1,3 +1,7 @@
+/*
+ * The Actor class, the basic agent in the model
+ */
+
 package tributeworld;
 
 import java.util.HashMap;
