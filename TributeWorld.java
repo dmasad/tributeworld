@@ -30,6 +30,7 @@ public class TributeWorld extends SimState {
 	
 	// Scenario specifications:
 	private int scenario = 0;
+	//private boolean firstRun = true; 
 	
 	// Model components:
 	IntGrid2D resourceGrid;
@@ -48,6 +49,7 @@ public class TributeWorld extends SimState {
 	public TributeWorld(long seed) {
 		super(seed);
 		dc = new DataCollection(this);
+		//if(firstRun) firstRun = false;
 
 	}
 	
@@ -65,6 +67,10 @@ public class TributeWorld extends SimState {
 		case 1: scenario1(); break;
 		default: scenario0(); break;
 		}
+		
+		System.out.println("here");
+		if (dc != null) dc = new DataCollection(this);
+		
 		schedule.scheduleRepeating(new Steppable() { 
 			/**
 			 * The main simulation loop (an anonymous class)
@@ -177,10 +183,10 @@ public class TributeWorld extends SimState {
 	public void setTributeSize(double tributeSize) { this.tributeSize = tributeSize;}
 	
 	public int getWorldHeight() { return worldHeight; }
-	public void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight;}
+	void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight;}
 
 	public int getWorldWidth() { return worldWidth; }
-	public void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
+	void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
 
 	public int getScenario() { return scenario;}
 	public void setScenario(int scenario) { this.scenario = scenario; }
@@ -213,6 +219,7 @@ public class TributeWorld extends SimState {
 	 * The classic, original Axelrod scenario
 	 */
 	private void scenario0() {
+
 		// Set the constants:
 		numActors = worldWidth;
 		worldHeight = 3;

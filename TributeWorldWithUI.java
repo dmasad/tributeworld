@@ -32,10 +32,12 @@ public class TributeWorldWithUI extends GUIState {
 	@Override
 	public void start() {
 		super.start();
-		mapFrame.dispose();
-		commitmentFrame.dispose();
-		this.controller.unregisterAllFrames();
-		
+		// Remove all previous visualizations:
+		if (commitmentFrame != null) {
+			mapFrame.dispose();
+			commitmentFrame.dispose();
+			this.controller.unregisterAllFrames();
+		}
 		setupCommitmentChart(this.controller);
 		setupMap(this.controller);
 		setupCharts(this.controller);
