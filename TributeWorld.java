@@ -113,7 +113,7 @@ public class TributeWorld extends SimState {
 	 * MODEL UTILITIES
 	 * =================================================================
 	 */
-	public double getCommitment(Actor actor1, Actor actor2) {
+	double getCommitment(Actor actor1, Actor actor2) {
 		int id1 = actor1.ID();
 		int id2 = actor2.ID();
 		return commitmentMatrix[id1][id2];
