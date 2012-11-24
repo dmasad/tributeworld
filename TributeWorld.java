@@ -15,21 +15,21 @@ import sim.util.Int2D;
 
 public class TributeWorld extends SimState {
 	// Grid parameters:
-	private int worldHeight = 3;
-	private int worldWidth = 10;
 	
 	// Model parameters:
-	private int numActors = 10;
-	private int actorsPerTurn = 3;
-	private double warCost = 0.25;
-	private double commitmentIncrement = 0.1;
-	private double tributeSize = 250;
-	private double minStartWealth = 300;
-	private double maxStartWealth = 500;
-	private double deltaWealth = maxStartWealth - minStartWealth;
+/*	protected int numActors = 10;
+	protected int actorsPerTurn = 3;
+	protected double warCost = 0.25;
+	protected double commitmentIncrement = 0.1;
+	protected double tributeSize = 250;
+	protected double minStartWealth = 300;
+	protected double maxStartWealth = 500;
+	protected double deltaWealth = maxStartWealth - minStartWealth;
+	*/
+	Scenario sb = new Scenario0(this);
 	
 	// Scenario specifications:
-	private int scenario = 0;
+	protected int scenario = 0;
 	//private boolean firstRun = true; 
 	
 	// Model components:
@@ -50,25 +50,28 @@ public class TributeWorld extends SimState {
 		super(seed);
 		dc = new DataCollection(this);
 		//if(firstRun) firstRun = false;
-
 	}
 	
 	public void start() {
 		super.start();
 		
-		resourceGrid = new IntGrid2D(worldWidth, worldHeight);
-		actorGrid = new SparseGrid2D(worldWidth, worldHeight);
-		actors = new ArrayList<Actor>();
 				
 		setupCommitmentMatrix();
 		
+		/*
 		switch(scenario) {
 		case 0: scenario0(); break;
 		case 1: scenario1(); break;
 		default: scenario0(); break;
 		}
+		*/
 		
-		System.out.println("here");
+		resourceGrid = new IntGrid2D(sb.worldWidth, sb.worldHeight);
+		actorGrid = new SparseGrid2D(sb.worldWidth, sb.worldHeight);
+		actors = new ArrayList<Actor>();
+
+		sb.scenarioSetup();
+				
 		if (dc != null) dc = new DataCollection(this);
 		
 		schedule.scheduleRepeating(new Steppable() { 
@@ -80,8 +83,8 @@ public class TributeWorld extends SimState {
 				warsThisTick = 0;
 				// Run the agents:
 				Actor active;
-				for(int i=0; i < actorsPerTurn; i++) {
-					int r = random.nextInt(numActors);
+				for(int i=0; i < sb.actorsPerTurn; i++) {
+					int r = random.nextInt(sb.numActors);
 					active = actors.get(r);
 					active.step(state);
 				}
@@ -100,9 +103,9 @@ public class TributeWorld extends SimState {
 	}
 	
 	private void setupCommitmentMatrix() {
-		commitmentMatrix = new double[numActors][numActors];
-		for (int i=0;i<numActors;i++) {
-			for (int k=0;k<numActors;k++) {
+		commitmentMatrix = new double[sb.numActors][sb.numActors];
+		for (int i=0;i<sb.numActors;i++) {
+			for (int k=0;k<sb.numActors;k++) {
 				if (k==i) commitmentMatrix[i][i] = 1;
 				else commitmentMatrix[i][k] = 0;
 			}
@@ -128,7 +131,7 @@ public class TributeWorld extends SimState {
 		int id2 = actor2.ID();
 		
 		double commitment = commitmentMatrix[id1][id2];
-		commitment += commitmentIncrement * d;
+		commitment += sb.commitmentIncrement * d;
 		if (commitment > 1) commitment = 1;
 		if (commitment < 0) commitment = 0;
 		
@@ -172,24 +175,30 @@ public class TributeWorld extends SimState {
 	 * GETTERS AND SETTERS
 	 * =================================================================
 	 */
-	public int getNumActors() { return numActors; }
-	void setNumActors(int numActors) { this.numActors = numActors;}
+	public int getNumActors() { return sb.numActors; }
+	void setNumActors(int numActors) { sb.numActors = numActors;}
 	
-	public double getWarCost() { return warCost; }
-	public void setWarCost(double warCost) { this.warCost = warCost;}
+	public double getWarCost() { return sb.warCost; }
+	public void setWarCost(double warCost) { sb.warCost = warCost;}
 	public Object domWarCost() {return new sim.util.Interval(0.0, 1.0); }
 	
-	public double getTributeSize() {return tributeSize;}
-	public void setTributeSize(double tributeSize) { this.tributeSize = tributeSize;}
+	public double getTributeSize() {return sb.tributeSize;}
+	public void setTributeSize(double tributeSize) { sb.tributeSize = tributeSize;}
 	
-	public int getWorldHeight() { return worldHeight; }
-	void setWorldHeight(int worldHeight) { this.worldHeight = worldHeight;}
+	public int getWorldHeight() { return sb.worldHeight; }
+	public void setWorldHeight(int worldHeight) { sb.worldHeight = worldHeight;}
 
-	public int getWorldWidth() { return worldWidth; }
-	void setWorldWidth(int worldWidth) { this.worldWidth = worldWidth; }
+	public int getWorldWidth() { return sb.worldWidth; }
+	public void setWorldWidth(int worldWidth) { sb.worldWidth = worldWidth; }
 
 	public int getScenario() { return scenario;}
-	public void setScenario(int scenario) { this.scenario = scenario; }
+	public void setScenario(int scenario) { 
+		this.scenario = scenario;
+		switch(scenario) {
+			case 0: sb = new Scenario0(this); break;
+			case 1: sb = new Scenario1(this); break;
+		}
+	}
 	public Object domScenario() { 
 		return new String[] {"Classic model", "Axelrod Model 2D"}; 
 	} 
@@ -214,64 +223,5 @@ public class TributeWorld extends SimState {
 		doLoop(TributeWorld.class, args);
 		System.exit(0);
 	}
-	
-	/**
-	 * The classic, original Axelrod scenario
-	 */
-	private void scenario0() {
-
-		// Set the constants:
-		numActors = worldWidth;
-		worldHeight = 3;
-		actorsPerTurn = 3;
-		warCost = 0.25;
-		commitmentIncrement = 0.1;
-		tributeSize = 250;
-		minStartWealth = 300;
-		maxStartWealth = 500;
-		deltaWealth = maxStartWealth - minStartWealth;
-		
-		// Set up the actors on the grid:
-		for (int x = 0; x<worldWidth; x++) {
-			resourceGrid.field[x][1] = 20;			
-			double startWealth = minStartWealth + (double)random.nextInt((int)deltaWealth);
-			Int2D newLocation = new Int2D(x, 1);
-			Actor newActor = new Actor(x, newLocation, startWealth);
-			actorGrid.setObjectLocation(newActor, newLocation);
-			actors.add(newActor);
-		}
-	}
-	/**
-	 * The Axelrod scenario generalized into 2D
-	 */
-	private void scenario1() {
-		// Set the constants:
-		setWorldWidth(10);
-		setWorldHeight(10);
-		numActors = worldWidth * worldHeight;
-		
-		actorsPerTurn = 3;
-		warCost = 0.25;
-		commitmentIncrement = 0.1;
-		tributeSize = 250;
-		minStartWealth = 300;
-		maxStartWealth = 500;
-		deltaWealth = maxStartWealth - minStartWealth;
-		
-		// Set up the grid and the actors
-		int counter = 0;
-		for (int x = 0; x < worldWidth; x++) {
-			for (int y = 0; y < worldHeight; y++) {
-				resourceGrid.field[x][y] = 20;
-				double startWealth = minStartWealth + (double)random.nextInt((int)deltaWealth);
-				Int2D newLocation = new Int2D(x, y);
-				Actor newActor = new Actor(counter, newLocation, startWealth);
-				actorGrid.setObjectLocation(newActor, newLocation);
-				actors.add(newActor);
-				counter++;
-			}
-		}	
-	}
-
 	
 }

@@ -10,8 +10,8 @@ import sim.display.Controller;
 import sim.display.Display2D;
 import sim.portrayal.*;
 import sim.display.GUIState;
-import sim.portrayal.Inspector;
-import sim.portrayal.SimpleInspector;
+//import sim.portrayal.Inspector;
+//import sim.portrayal.SimpleInspector;
 import sim.portrayal.grid.FastValueGridPortrayal2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.OvalPortrayal2D;
@@ -48,6 +48,7 @@ public class TributeWorldWithUI extends GUIState {
 		mapDisplay.reset();
 		commitmentDisplay.reset();
 		
+		
 	}
 	
 
@@ -61,6 +62,7 @@ public class TributeWorldWithUI extends GUIState {
 		
 		mapDisplay.reset();
 		commitmentDisplay.reset();
+		c.refresh();
 	}
 	
 	
