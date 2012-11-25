@@ -87,4 +87,8 @@ public class Coalition {
 		return memberID;
 	}
 	
+	public int size() {
+		return members.size();
+	}
+	
 }

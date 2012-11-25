@@ -13,10 +13,10 @@ import sim.util.Int2D;
 
 public class Actor implements Steppable {
 	
-	private int id;
-	private Int2D location;
-	private double wealth;
-	private TributeWorld world;
+	protected int id;
+	protected Int2D location;
+	protected double wealth;
+	protected TributeWorld world;
 	
 	public Actor(int id, Int2D location, double wealth) {
 		this.id = id;

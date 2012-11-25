@@ -14,18 +14,7 @@ import sim.util.Bag;
 import sim.util.Int2D;
 
 public class TributeWorld extends SimState {
-	// Grid parameters:
-	
-	// Model parameters:
-/*	protected int numActors = 10;
-	protected int actorsPerTurn = 3;
-	protected double warCost = 0.25;
-	protected double commitmentIncrement = 0.1;
-	protected double tributeSize = 250;
-	protected double minStartWealth = 300;
-	protected double maxStartWealth = 500;
-	protected double deltaWealth = maxStartWealth - minStartWealth;
-	*/
+
 	Scenario sb = new Scenario0(this);
 	
 	// Scenario specifications:
@@ -55,16 +44,14 @@ public class TributeWorld extends SimState {
 	public void start() {
 		super.start();
 		
-				
-		setupCommitmentMatrix();
-		
-		/*
 		switch(scenario) {
-		case 0: scenario0(); break;
-		case 1: scenario1(); break;
-		default: scenario0(); break;
-		}
-		*/
+		case 0: sb = new Scenario0(this); break;
+		case 1: sb = new Scenario1(this); break;
+		case 2: sb = new Scenario2(this); break;
+		case 3: sb = new Scenario3(this); break;
+	}
+		
+		setupCommitmentMatrix();
 		
 		resourceGrid = new IntGrid2D(sb.worldWidth, sb.worldHeight);
 		actorGrid = new SparseGrid2D(sb.worldWidth, sb.worldHeight);
@@ -122,7 +109,7 @@ public class TributeWorld extends SimState {
 		return commitmentMatrix[id1][id2];
 	}
 	
-	public double[][] getCommitmentMatrix() { return commitmentMatrix; }
+	double[][] getCommitmentMatrix() { return commitmentMatrix; }
 	
 	public void changeCommitment(Actor actor1, Actor actor2, boolean positive) {
 		int d = -1;
@@ -169,6 +156,10 @@ public class TributeWorld extends SimState {
 			for (Actor c : defenders.getMembers())
 				changeCommitment(a,c, false);
 		}
+		
+		// Add to series
+		dc.addCoalition(attackers.size());
+		dc.addCoalition(defenders.size());
 	}
 	
 	/*
@@ -192,15 +183,10 @@ public class TributeWorld extends SimState {
 	public void setWorldWidth(int worldWidth) { sb.worldWidth = worldWidth; }
 
 	public int getScenario() { return scenario;}
-	public void setScenario(int scenario) { 
-		this.scenario = scenario;
-		switch(scenario) {
-			case 0: sb = new Scenario0(this); break;
-			case 1: sb = new Scenario1(this); break;
-		}
-	}
+	public void setScenario(int scenario) { this.scenario = scenario; }
 	public Object domScenario() { 
-		return new String[] {"Classic model", "Axelrod Model 2D"}; 
+		return new String[] {"Classic model", "Axelrod Model 2D", 
+				"Heterogenous Resources", "Migration"}; 
 	} 
 	
 	// Not for inspector:

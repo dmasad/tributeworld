@@ -13,8 +13,14 @@ As actors pay tribute or fight, their loyalty to one another changes: tribute pa
 The model uses the [MASON](http://cs.gmu.edu/~eclab/projects/mason/) simulation framework. The specific files are:
 
 * **Actor.java:** The code for the basic Actor agent.
+* **MobileActor.java:** An extension of agent, with the added option of migrating in response to threats or if there are no neighbors.
 * **Coalition.java:** The code for assembling a coalition, an ad-hoc aggregate agent used for war.
 * **TributeWorld.java:** The overall model manager class.
 * **TributeWorldWithUI.java:** The visualization for the model.
 * **DataCollection.java:** Class for collecting data from the simulation, to feed into the visualization.
+* **Scenario.java:** The base scenario class; all scenarios derive from it.
+    * **Scenario0.java:** The original Axelrod model.
+    * **Scenario1.java:** The Axelrod model extended into a 2D grid
+    * **Scenario2.java:** The 2D model with heterogenous resources spread across the grid
+    * **Scenario3.java:** The heterogenous resource model, with added migration behavior
 

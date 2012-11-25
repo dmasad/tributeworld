@@ -87,6 +87,7 @@ public class TributeWorldWithUI extends GUIState {
 	private void setupCharts(Controller c) {
 		setupWealthChart(c);
 		setupWarChart(c);
+		setupCoalitionChart(c);
 	}
 	
 	private void setupCommitmentPortrayal() {
@@ -131,7 +132,8 @@ public class TributeWorldWithUI extends GUIState {
 				ArrayList<Double> wealth = world.getWealth();
 				double min = minWealth(wealth);
 				double max = maxWealth(wealth);
-				scale = (min != max) ? 0.01 + ((a.getWealth() - min) / (max - min)) : 0.5;
+				scale = (min != max) ? ((a.getWealth() - min) / (max - min)) : 0.5;
+				scale = (scale > 0.1) ? scale : 0.1;
 				paint = Color.BLUE;
 				filled = true;
 				super.draw(object, graphics, info);
@@ -154,6 +156,7 @@ public class TributeWorldWithUI extends GUIState {
 		};
 		
 		actorPortrayal.setPortrayalForClass(Actor.class, actorAvatar);
+		actorPortrayal.setPortrayalForClass(MobileActor.class, actorAvatar);
 		mapDisplay.attach(actorPortrayal, "Actors");
 		
 
@@ -186,6 +189,19 @@ public class TributeWorldWithUI extends GUIState {
 		chartFrame.setTitle("Number of Wars");
 		chartFrame.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 		c.registerFrame(chartFrame);
+	}
+	
+	private void setupCoalitionChart(Controller c) {
+		TimeSeriesChartGenerator chartGen = new TimeSeriesChartGenerator();
+		chartGen.setTitle("Average Coalition Size");
+		chartGen.setXAxisLabel("Steps");
+		chartGen.setYAxisLabel("Avg. Coalition Size");
+		chartGen.addSeries(((TributeWorld)state).dc.avgCoalitionSize, null);
+		JFrame chartFrame = chartGen.createFrame();
+		chartFrame.setTitle("Average Coalition Size");
+		chartFrame.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+		c.registerFrame(chartFrame);
+		
 	}
 	
 	public Object getSimulationInspectedObject() { return state; }
