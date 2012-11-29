@@ -68,7 +68,7 @@ public class TributeWorldWithUI extends GUIState {
 	
 	private void setupCommitmentChart(Controller c) {		
 		TributeWorld world = (TributeWorld)state;
-		commitmentDisplay = new Display2D(world.getNumActors()*20, world.getNumActors()*20, this, 1);
+		commitmentDisplay = new Display2D(world.getNumActors()*10, world.getNumActors()*10, this, 1);
 		commitmentFrame = commitmentDisplay.createFrame();
 		commitmentFrame.setTitle("Commitment Matrix");
 		c.registerFrame(commitmentFrame);

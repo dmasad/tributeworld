@@ -4,12 +4,17 @@ import sim.util.Int2D;
 
 public class Scenario0 extends Scenario {
 
+	
 	public Scenario0(TributeWorld tw) {
 		super(tw);
 		this.tw = tw;
 		// Set the constants:
+		try {
+			worldWidth = tw.getWorldWidth();
+		}
+		catch (NullPointerException e) {worldWidth = 10; }
+		
 		numActors = worldWidth;
-		worldWidth = 10;
 		worldHeight = 3;
 		actorsPerTurn = 3;
 		warCost = 0.25;
@@ -22,7 +27,8 @@ public class Scenario0 extends Scenario {
 	}
 
 	void scenarioSetup(){
-
+		
+		
 		// Set up the actors on the grid:
 		for (int x = 0; x<worldWidth; x++) {
 			tw.resourceGrid.field[x][1] = 20;			

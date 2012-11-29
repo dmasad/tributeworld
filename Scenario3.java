@@ -17,7 +17,9 @@ public class Scenario3 extends Scenario{
 		worldHeight = tw.getWorldHeight();
 		numActors = (int)Math.floor(worldWidth * worldHeight * density);
 		pMigrate = 0.5;
-		actorsPerTurn = 3;
+		
+		//actorsPerTurn = 3;
+		actorsPerTurn = (int)Math.floor(0.3 * numActors);
 		warCost = 0.25;
 		commitmentIncrement = 0.1;
 		tributeSize = 250;

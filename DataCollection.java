@@ -1,9 +1,10 @@
 package tributeworld;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jfree.data.xy.XYSeries;
-
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.field.grid.DoubleGrid2D;
@@ -13,6 +14,7 @@ public class DataCollection implements Steppable {
 	ArrayList<XYSeries> actorWealth;
 	XYSeries countWars;
 	XYSeries avgCoalitionSize;
+	
 	int totalCoalitions = 0;
 	int countCoalitions = 0;
 	int numActors;
@@ -61,5 +63,80 @@ public class DataCollection implements Steppable {
 		countCoalitions = 0;
 	}
 	
+	/*
+	 * DATA EXPORT FUNCTIONS
+	 * =====================
+	 */
+	
+	public void export_data() {
+		exportTimeseries("TimeSeries.csv");
+		exportFinalCommitments("CommitmentTest.csv");
+	}
+	
+	/**
+	 * Exports all TimeSeries (War Count, Coalition Sizes, Actors Wealths)
+	 * to a CSV file with the name fileName.
+	 * @param fileName
+	 */
+	public void exportTimeseries(String fileName) {
+		
+		try {
+			FileWriter writer = new FileWriter(fileName);
+			// Write headers:
+			writer.append("Step, Avg Coalition Size, Count of Wars");
+			for (int i = 0; i < numActors; i++)
+				writer.append(",Actor " + i);
+			writer.append("\n");
+			
+			// Write data:
+			int max = countWars.getItemCount();
+			for(int i=0; i<max; i++) {
+				String new_line = "";
+				new_line += i + ",";
+				new_line += avgCoalitionSize.getY(i) + ",";
+				new_line += countWars.getY(i) + "";
+				for (int j = 0; j<numActors; j++)
+					new_line += "," + actorWealth.get(j).getY(i);
+				new_line += "\n";
+				writer.append(new_line);
+			}
+			// Close out:
+			writer.flush();
+			writer.close();
+			
+		}
+		catch(IOException e) {e.printStackTrace();}
+	}
+	
+	/**
+	 * Exports the current state of the commitment matrix.
+	 * @param fileName
+	 */
+	public void exportFinalCommitments(String fileName) {
+		try {
+			FileWriter writer = new FileWriter(fileName);
+			// Write header:
+			writer.append("Actor");
+			for (int i=0; i<numActors;i++)
+				writer.append(", Actor" + i);
+			writer.append("\n");
+			
+			// Writer lines:
+			for (int y=0;y<numActors;y++) {
+				String new_line = "Actor " + y;
+				for (int x=0;x<numActors; x++)
+					new_line += "," + commitmentGrid.field[x][y];
+				new_line += "\n";
+				writer.append(new_line);
+			}
+			// Close out:
+			writer.flush();
+			writer.close();
+		} catch(IOException e) {e.printStackTrace();}
+		
+	}
+	
+	
+
 	
 }

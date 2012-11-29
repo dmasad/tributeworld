@@ -45,11 +45,11 @@ public class TributeWorld extends SimState {
 		super.start();
 		
 		switch(scenario) {
-		case 0: sb = new Scenario0(this); break;
-		case 1: sb = new Scenario1(this); break;
-		case 2: sb = new Scenario2(this); break;
-		case 3: sb = new Scenario3(this); break;
-	}
+			case 0: sb = new Scenario0(this); break;
+			case 1: sb = new Scenario1(this); break;
+			case 2: sb = new Scenario2(this); break;
+			case 3: sb = new Scenario3(this); break;
+		}
 		
 		setupCommitmentMatrix();
 		
@@ -87,6 +87,11 @@ public class TributeWorld extends SimState {
 			}
 		});
 		
+	}
+	
+	public void finish() {
+		super.finish();
+		dc.export_data();
 	}
 	
 	private void setupCommitmentMatrix() {
