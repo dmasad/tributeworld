@@ -52,7 +52,6 @@ public class TributeWorld extends SimState {
 		}
 		
 		setupCommitmentMatrix();
-		
 		resourceGrid = new IntGrid2D(sb.worldWidth, sb.worldHeight);
 		actorGrid = new SparseGrid2D(sb.worldWidth, sb.worldHeight);
 		actors = new ArrayList<Actor>();
@@ -91,7 +90,7 @@ public class TributeWorld extends SimState {
 	
 	public void finish() {
 		super.finish();
-		dc.export_data();
+		//dc.export_data();
 	}
 	
 	private void setupCommitmentMatrix() {
