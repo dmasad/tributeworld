@@ -34,7 +34,7 @@ def get_power_configuration(graph, cutoff_factor=2):
         [http://www.irows.ucr.edu/papers/irows14/irows14.htm]
 
         Non-powers, local power, great power, superpower.
-        There may only be one superpower.
+        There may at most one superpower.
 
     '''
 
@@ -47,7 +47,8 @@ def get_power_configuration(graph, cutoff_factor=2):
     local_powers = []
 
     index = 0
-
+    if len(components)==1: 
+        return 6
     # Check to see if the greatest component is a superpower
     if components[0] >= (cutoff_factor * components[1]):
         superpower.append(components[0])

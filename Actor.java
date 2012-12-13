@@ -73,6 +73,7 @@ public class Actor implements Steppable {
 	}
 	
 	public double evaluateVulnerability(Actor target) {
+		if (!Coalition.initialCheck(world, target, this)) return 0; // Initial sanity-check
 		Coalition allies = new Coalition(world, this, target);
 		if (!allies.validTarget()) return 0;
 		

@@ -24,6 +24,7 @@ public class Coalition {
 		
 		this.members = new ArrayList<Actor>();
 		members.add(source);
+		
 		findMembers();
 		findCommitment();
 	}
@@ -53,6 +54,22 @@ public class Coalition {
 			openset.remove(current);
 			closedset.add(current);
 		}	
+	}
+	
+	/**
+	 * Initial check to see whether to proceed with coalition-building.
+	 * Static, for minimal disruption of existing code-base.
+	 * TODO: See if there's a better way.
+	 * @return whether there is a chance of a path from source to target
+	 */
+	public static boolean initialCheck(TributeWorld world, Actor target, Actor source) {
+		Bag target_neighbors = 
+				world.actorGrid.getNeighborsMaxDistance(target.getX(), target.getY(), 1, true, null, null, null);
+		for (Object e : target_neighbors) {
+			Actor neighbor = (Actor)e;
+			if (world.getCommitment(neighbor, source) > world.getCommitment(neighbor, target)) return true;
+		}
+		return false;
 	}
 	
 	public boolean validTarget() {
