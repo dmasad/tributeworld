@@ -39,13 +39,13 @@ public class ParameterSweep {
 		
 		public void addMatrix(double[][] commitmentMatrix) {
 			int height = commitmentMatrix.length, width = commitmentMatrix[0].length;
-			double [][]shit = new double [height][width];
+			double [][]new_matrix = new double [height][width];
 			for(int i = 0; i < height; i++){
 				for(int j = 0; j < width; j++){
-					shit[i][j] = new Double(commitmentMatrix[i][j]);
+					new_matrix[i][j] = new Double(commitmentMatrix[i][j]);
 				}
 			}
-			endMatrices.add(shit);
+			endMatrices.add(new_matrix);
 
 //			endMatrices.add(commitmentMatrix);
 			

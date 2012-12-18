@@ -51,6 +51,12 @@ public class TributeWorldWithUI extends GUIState {
 		
 	}
 	
+	public void finish() {
+		//((TributeWorld)state).dc.exportMatrixSeries();
+		super.finish();
+		
+	}
+	
 
 	@Override
 	public void init(Controller c) {

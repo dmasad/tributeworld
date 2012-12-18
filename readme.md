@@ -23,4 +23,12 @@ The model uses the [MASON](http://cs.gmu.edu/~eclab/projects/mason/) simulation 
     * **Scenario1.java:** The Axelrod model extended into a 2D grid
     * **Scenario2.java:** The 2D model with heterogenous resources spread across the grid
     * **Scenario3.java:** The heterogenous resource model, with added migration behavior
+* **ParameterSweep.java:** The code to perform a parameter sweep over the model and store the results. Modified frequently to perform different experiments.
+
+### Analysis:
+
+* **OutputAnalysis.py:** Python code to classify the polarity of a commitment graph.
+* *.pynb files:* Several IPython Notebooks used in data investigation. Also edited frequently.
+
+
 

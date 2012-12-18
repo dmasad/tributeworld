@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jfree.data.xy.XYSeries;
+
+import com.google.gson.Gson;
+
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.field.grid.DoubleGrid2D;
@@ -20,6 +23,8 @@ public class DataCollection implements Steppable {
 	int numActors;
 	DoubleGrid2D commitmentGrid;
 	
+	ArrayList<double[][]> matrixSeries;
+	
 	
 	public DataCollection(TributeWorld world) {
 		numActors = world.getNumActors();
@@ -33,12 +38,23 @@ public class DataCollection implements Steppable {
 		
 		commitmentGrid = new DoubleGrid2D(world.getNumActors(), world.getNumActors());
 		
+		matrixSeries = new ArrayList<double[][]>();
+		
 		
 	}
 	
 	public void addCoalition(int coalitionSize) {
 		totalCoalitions += coalitionSize;
 		countCoalitions++;
+	}
+	
+	public void addMatrix(double[][] matrix) {
+		int height = matrix.length, width = matrix[0].length;
+		double[][] newMatrix = new double[height][width];
+		for(int i=0; i<height; i++)
+			for(int j=0; j<width; j++)
+				newMatrix[i][j] = new Double(matrix[i][j]);
+		matrixSeries.add(newMatrix);		
 	}
 	
 	public void step(SimState state) {
@@ -55,6 +71,9 @@ public class DataCollection implements Steppable {
 		// Commitment matrix, for portrayal:
 		commitmentGrid.field = world.getCommitmentMatrix();
 		
+		// Add commitment matrix to MatrixSeries
+		addMatrix(commitmentGrid.field);
+		
 		// Avg. Coalition Size:
 		double avgCoalition = 0;
 		if (countCoalitions > 0) avgCoalition = totalCoalitions / countCoalitions;
@@ -67,6 +86,13 @@ public class DataCollection implements Steppable {
 	 * DATA EXPORT FUNCTIONS
 	 * =====================
 	 */
+	
+	public void exportMatrixSeries() {
+		Gson gson = new Gson();
+		String matrixSeriesJSON = gson.toJson(matrixSeries);
+		ParameterSweep.exportJSON("src/tributeworld/data/matrixSeries.json", 
+				matrixSeriesJSON);
+	}
 	
 	public void export_data() {
 		exportTimeseries("TimeSeries.csv");
